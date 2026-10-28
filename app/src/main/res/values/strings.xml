@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">São Paulo FC</string>
+    <string name="titulo">São Paulo FC</string>
+    <string name="proximos">Próximos jogos</string>
+    <string name="tabela">Brasileirão</string>
+    <string name="casa">Casa</string>
+    <string name="fora">Fora</string>
+    <string name="neutro">Neutro</string>
+    <string name="ao_vivo">Ao vivo</string>
+    <string name="canal_a_confirmar">Canal a confirmar</string>
+    <string name="estadio_a_confirmar">Estádio a confirmar</string>
+    <string name="atualizado">atualizado às %1$s</string>
+    <string name="atualizando">atualizando…</string>
+    <string name="sem_rede_cache">sem rede · última atualização às %1$s</string>
+    <string name="atualizar">Atualizar</string>
+    <string name="carregando">Buscando jogos e tabela…</string>
+    <string name="sem_rede">Sem rede. Não deu para falar com a ESPN.</string>
+    <string name="sem_jogos">Nenhum próximo jogo no calendário da ESPN.</string>
+    <string name="tabela_indisponivel">Tabela indisponível agora.</string>
+    <string name="fonte">Fonte: ESPN</string>
+    <string name="col_pos">#</string>
+    <string name="col_j">J</string>
+    <string name="col_v">V</string>
+    <string name="col_e">E</string>
+    <string name="col_d">D</string>
+    <string name="col_gp">GP</string>
+    <string name="col_sg">SG</string>
+    <string name="col_p">P</string>
+    <string name="legenda_campeao">Campeão</string>
+    <string name="legenda_libertadores">Libertadores</string>
+    <string name="legenda_pre">Pré-Libertadores</string>
+    <string name="legenda_sul">Sul-Americana</string>
+    <string name="legenda_z4">Rebaixamento</string>
+</resources>

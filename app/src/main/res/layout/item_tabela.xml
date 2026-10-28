@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="0dp"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:gravity="center_vertical"
+    android:orientation="horizontal">
+
+    <View
+        android:id="@+id/barra"
+        android:layout_width="@dimen/barra_faixa"
+        android:layout_height="match_parent" />
+
+    <ImageView
+        android:id="@+id/trofeu"
+        android:layout_width="@dimen/trofeu"
+        android:layout_height="@dimen/trofeu"
+        android:contentDescription="@string/legenda_campeao"
+        android:scaleType="fitCenter"
+        android:src="@drawable/trofeu"
+        android:visibility="invisible" />
+
+    <TextView
+        android:id="@+id/pos"
+        android:layout_width="@dimen/col_pos"
+        android:layout_height="wrap_content"
+        android:gravity="end"
+        android:includeFontPadding="false"
+        android:textColor="@color/branco"
+        android:textSize="@dimen/texto_tabela" />
+
+    <ImageView
+        android:id="@+id/escudo"
+        android:layout_width="@dimen/escudo_linha"
+        android:layout_height="@dimen/escudo_linha"
+        android:layout_marginStart="3dp"
+        android:contentDescription="@string/titulo"
+        android:scaleType="fitCenter"
+        android:src="@drawable/escudo"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/time"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_weight="1"
+        android:ellipsize="end"
+        android:includeFontPadding="false"
+        android:maxLines="1"
+        android:textColor="@color/branco"
+        android:textSize="@dimen/texto_tabela" />
+
+    <TextView
+        android:id="@+id/jogos"
+        android:layout_width="@dimen/col_num"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:includeFontPadding="false"
+        android:textColor="@color/branco"
+        android:textSize="@dimen/texto_tabela" />
+
+    <TextView
+        android:id="@+id/vitorias"
+        android:layout_width="@dimen/col_num"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:includeFontPadding="false"
+        android:textColor="@color/branco"
+        android:textSize="@dimen/texto_tabela" />
+
+    <TextView
+        android:id="@+id/empates"
+        android:layout_width="@dimen/col_num"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:includeFontPadding="false"
+        android:textColor="@color/branco"
+        android:textSize="@dimen/texto_tabela" />
+
+    <TextView
+        android:id="@+id/derrotas"
+        android:layout_width="@dimen/col_num"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:includeFontPadding="false"
+        android:textColor="@color/branco"
+        android:textSize="@dimen/texto_tabela" />
+
+    <TextView
+        android:id="@+id/gols"
+        android:layout_width="@dimen/col_gp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:includeFontPadding="false"
+        android:textColor="@color/branco"
+        android:textSize="@dimen/texto_tabela" />
+
+    <TextView
+        android:id="@+id/saldo"
+        android:layout_width="@dimen/col_sg"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:includeFontPadding="false"
+        android:textColor="@color/branco"
+        android:textSize="@dimen/texto_tabela" />
+
+    <TextView
+        android:id="@+id/pontos"
+        android:layout_width="@dimen/col_p"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:includeFontPadding="false"
+        android:textColor="@color/branco"
+        android:textSize="@dimen/texto_tabela" />
+</LinearLayout>

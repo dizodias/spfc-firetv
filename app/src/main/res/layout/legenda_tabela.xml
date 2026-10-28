@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/legenda"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:orientation="horizontal">
+
+    <View
+        android:id="@+id/bolinha_campeao"
+        android:layout_width="8dp"
+        android:layout_height="8dp"
+        android:background="@drawable/bolinha" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:includeFontPadding="false"
+        android:maxLines="1"
+        android:text="@string/legenda_campeao"
+        android:textColor="@color/texto_fraco"
+        android:textSize="@dimen/texto_legenda" />
+
+    <View
+        android:id="@+id/bolinha_libertadores"
+        android:layout_width="8dp"
+        android:layout_height="8dp"
+        android:layout_marginStart="8dp"
+        android:background="@drawable/bolinha" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:includeFontPadding="false"
+        android:maxLines="1"
+        android:text="@string/legenda_libertadores"
+        android:textColor="@color/texto_fraco"
+        android:textSize="@dimen/texto_legenda" />
+
+    <View
+        android:id="@+id/bolinha_pre"
+        android:layout_width="8dp"
+        android:layout_height="8dp"
+        android:layout_marginStart="8dp"
+        android:background="@drawable/bolinha" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:includeFontPadding="false"
+        android:maxLines="1"
+        android:text="@string/legenda_pre"
+        android:textColor="@color/texto_fraco"
+        android:textSize="@dimen/texto_legenda" />
+
+    <View
+        android:id="@+id/bolinha_sul"
+        android:layout_width="8dp"
+        android:layout_height="8dp"
+        android:layout_marginStart="8dp"
+        android:background="@drawable/bolinha" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:includeFontPadding="false"
+        android:maxLines="1"
+        android:text="@string/legenda_sul"
+        android:textColor="@color/texto_fraco"
+        android:textSize="@dimen/texto_legenda" />
+
+    <View
+        android:id="@+id/bolinha_z4"
+        android:layout_width="8dp"
+        android:layout_height="8dp"
+        android:layout_marginStart="8dp"
+        android:background="@drawable/bolinha" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:includeFontPadding="false"
+        android:maxLines="1"
+        android:text="@string/legenda_z4"
+        android:textColor="@color/texto_fraco"
+        android:textSize="@dimen/texto_legenda" />
+</LinearLayout>

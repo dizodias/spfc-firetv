@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:paddingBottom="1dp">
+
+    <View
+        android:layout_width="@dimen/barra_faixa"
+        android:layout_height="1dp" />
+
+    <View
+        android:layout_width="@dimen/trofeu"
+        android:layout_height="1dp" />
+
+    <TextView
+        android:layout_width="@dimen/col_pos"
+        android:layout_height="wrap_content"
+        android:gravity="end"
+        android:includeFontPadding="false"
+        android:text="@string/col_pos"
+        android:textColor="@color/texto_apagado"
+        android:textSize="@dimen/texto_cabecalho" />
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_weight="1"
+        android:includeFontPadding="false"
+        android:textColor="@color/texto_apagado"
+        android:textSize="@dimen/texto_cabecalho" />
+
+    <TextView
+        android:layout_width="@dimen/col_num"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:includeFontPadding="false"
+        android:text="@string/col_j"
+        android:textColor="@color/texto_apagado"
+        android:textSize="@dimen/texto_cabecalho" />
+
+    <TextView
+        android:layout_width="@dimen/col_num"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:includeFontPadding="false"
+        android:text="@string/col_v"
+        android:textColor="@color/texto_apagado"
+        android:textSize="@dimen/texto_cabecalho" />
+
+    <TextView
+        android:layout_width="@dimen/col_num"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:includeFontPadding="false"
+        android:text="@string/col_e"
+        android:textColor="@color/texto_apagado"
+        android:textSize="@dimen/texto_cabecalho" />
+
+    <TextView
+        android:layout_width="@dimen/col_num"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:includeFontPadding="false"
+        android:text="@string/col_d"
+        android:textColor="@color/texto_apagado"
+        android:textSize="@dimen/texto_cabecalho" />
+
+    <TextView
+        android:layout_width="@dimen/col_gp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:includeFontPadding="false"
+        android:text="@string/col_gp"
+        android:textColor="@color/texto_apagado"
+        android:textSize="@dimen/texto_cabecalho" />
+
+    <TextView
+        android:layout_width="@dimen/col_sg"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:includeFontPadding="false"
+        android:text="@string/col_sg"
+        android:textColor="@color/texto_apagado"
+        android:textSize="@dimen/texto_cabecalho" />
+
+    <TextView
+        android:layout_width="@dimen/col_p"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:includeFontPadding="false"
+        android:text="@string/col_p"
+        android:textColor="@color/texto_apagado"
+        android:textSize="@dimen/texto_cabecalho" />
+</LinearLayout>

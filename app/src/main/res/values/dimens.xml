@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="barra_faixa">4dp</dimen>
+    <dimen name="trofeu">11dp</dimen>
+    <dimen name="escudo_linha">14dp</dimen>
+    <dimen name="col_pos">20dp</dimen>
+    <dimen name="col_num">22dp</dimen>
+    <dimen name="col_gp">24dp</dimen>
+    <dimen name="col_sg">28dp</dimen>
+    <dimen name="col_p">22dp</dimen>
+    <dimen name="texto_tabela">12sp</dimen>
+    <dimen name="texto_cabecalho">11sp</dimen>
+    <dimen name="texto_legenda">10sp</dimen>
+</resources>

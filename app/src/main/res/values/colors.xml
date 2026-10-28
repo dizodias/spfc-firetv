@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="fundo">#FF0B0B0D</color>
+    <color name="vermelho">#FFC60000</color>
+    <color name="branco">#FFFFFFFF</color>
+    <color name="texto_fraco">#B3FFFFFF</color>
+    <color name="texto_apagado">#80FFFFFF</color>
+    <color name="linha">#14FFFFFF</color>
+    <color name="sp_fundo">#33C60000</color>
+</resources>
