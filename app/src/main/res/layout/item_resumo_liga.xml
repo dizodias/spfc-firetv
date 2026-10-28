@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:paddingTop="2dp"
+    android:paddingBottom="2dp">
+
+    <TextView
+        android:id="@+id/liga_nome"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:ellipsize="end"
+        android:includeFontPadding="false"
+        android:maxLines="1"
+        android:textColor="@color/branco"
+        android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/liga_j"
+        android:layout_width="36dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:includeFontPadding="false"
+        android:textColor="@color/branco"
+        android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/liga_v"
+        android:layout_width="36dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:includeFontPadding="false"
+        android:textColor="@color/vitoria"
+        android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/liga_e"
+        android:layout_width="36dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:includeFontPadding="false"
+        android:textColor="@color/empate"
+        android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/liga_d"
+        android:layout_width="36dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:includeFontPadding="false"
+        android:textColor="@color/derrota"
+        android:textSize="15sp" />
+</LinearLayout>

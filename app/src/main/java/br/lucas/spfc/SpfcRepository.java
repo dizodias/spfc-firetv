@@ -4,13 +4,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,16 +13,18 @@ import java.util.List;
 /** Junta a leitura da ESPN com o arquivo {@code spfc-cache.json}. Vale por 45 minutos. */
 final class SpfcRepository {
     static final long TTL_MS = 45L * 60L * 1000L;
+    private final File pasta;
     private final File arquivo;
 
     SpfcRepository(File pasta) {
+        this.pasta = pasta;
         this.arquivo = new File(pasta, "spfc-cache.json");
     }
 
     Snapshot ler() {
         if (!arquivo.exists()) return null;
         try {
-            return interpretar(new JSONObject(lerTexto(arquivo)));
+            return interpretar(new JSONObject(Rede.arquivo(arquivo)));
         } catch (Exception e) {
             return null;
         }
@@ -39,33 +36,22 @@ final class SpfcRepository {
                 && agora - snapshot.fetchedAtMillis < TTL_MS;
     }
 
-    /** Busca na ESPN. Grava o cache só quando a tabela veio junto. */
+    /** Busca na ESPN e na cadeia de canais. Grava o cache só quando a tabela veio junto. */
     Snapshot atualizar() throws IOException {
-        Snapshot novo = EspnClient.buscar(new EspnBroadcastResolver());
+        BroadcastResolver cadeia = new ChainBroadcastResolver(
+                new EspnBroadcastResolver(),
+                new GeGloboBroadcastResolver(pasta),
+                new JsonCanaisResolver());
+        Snapshot novo = EspnClient.buscar(cadeia);
         if (!novo.standings.isEmpty()) gravar(novo);
         return novo;
     }
 
     void gravar(Snapshot snapshot) throws IOException {
-        File pasta = arquivo.getParentFile();
-        if (pasta != null && !pasta.exists() && !pasta.mkdirs()) {
-            throw new IOException("sem pasta de cache");
-        }
-        File temporario = new File(pasta, "spfc-cache.json.tmp");
-        final byte[] bytes;
         try {
-            bytes = json(snapshot).toString().getBytes(StandardCharsets.UTF_8);
+            Rede.gravar(arquivo, json(snapshot).toString());
         } catch (JSONException e) {
             throw new IOException("não montou o cache", e);
-        }
-        try (FileOutputStream saida = new FileOutputStream(temporario)) {
-            saida.write(bytes);
-        }
-        if (arquivo.exists() && !arquivo.delete()) {
-            throw new IOException("não apagou o cache antigo");
-        }
-        if (!temporario.renameTo(arquivo)) {
-            throw new IOException("não gravou o cache");
         }
     }
 
@@ -81,6 +67,11 @@ final class SpfcRepository {
             item.put("kickoff", jogo.kickoffInstant.toString());
             item.put("venue", jogo.venue);
             item.put("live", jogo.live);
+            item.put("league", jogo.leagueName);
+            item.put("leagueSlug", jogo.leagueSlug);
+            item.put("finished", jogo.finished);
+            if (jogo.goalsFor != null) item.put("goalsFor", jogo.goalsFor.intValue());
+            if (jogo.goalsAgainst != null) item.put("goalsAgainst", jogo.goalsAgainst.intValue());
             JSONArray canais = new JSONArray();
             for (int c = 0; c < jogo.channels.size(); c++) canais.put(jogo.channels.get(c));
             item.put("channels", canais);
@@ -130,7 +121,12 @@ final class SpfcRepository {
                         inicio,
                         item.optString("venue", ""),
                         canais,
-                        item.optBoolean("live", false)));
+                        item.optBoolean("live", false),
+                        item.optString("league", ""),
+                        item.optString("leagueSlug", ""),
+                        inteiroOuNulo(item, "goalsFor"),
+                        inteiroOuNulo(item, "goalsAgainst"),
+                        item.optBoolean("finished", false)));
             }
         }
         List<StandingRow> tabela = new ArrayList<>();
@@ -155,14 +151,8 @@ final class SpfcRepository {
         return new Snapshot(jogos, tabela, raiz.optLong("fetchedAt", 0));
     }
 
-    private static String lerTexto(File origem) throws IOException {
-        try (InputStream entrada = new FileInputStream(origem)) {
-            ByteArrayOutputStream saida = new ByteArrayOutputStream();
-            byte[] bloco = new byte[4096];
-            int lido;
-            while ((lido = entrada.read(bloco)) >= 0) saida.write(bloco, 0, lido);
-            // toString(Charset) só existe no Android 13. No Fire OS 6 o app fecha.
-            return new String(saida.toByteArray(), StandardCharsets.UTF_8);
-        }
+    private static Integer inteiroOuNulo(JSONObject item, String chave) {
+        if (!item.has(chave) || item.isNull(chave)) return null;
+        return item.optInt(chave);
     }
 }

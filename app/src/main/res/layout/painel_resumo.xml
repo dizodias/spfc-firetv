@@ -1,0 +1,416 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/resumo"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/cartao_jogo"
+    android:descendantFocusability="blocksDescendants"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:nextFocusDown="@id/atualizar"
+    android:nextFocusLeft="@id/jogos"
+    android:orientation="vertical"
+    android:paddingStart="16dp"
+    android:paddingTop="10dp"
+    android:paddingEnd="16dp"
+    android:paddingBottom="10dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-medium"
+        android:includeFontPadding="false"
+        android:letterSpacing="0.08"
+        android:text="@string/resumo_titulo"
+        android:textAllCaps="true"
+        android:textColor="@color/texto_fraco"
+        android:textSize="12sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:includeFontPadding="false"
+                android:letterSpacing="0.08"
+                android:text="@string/col_j"
+                android:textAllCaps="true"
+                android:textColor="@color/texto_apagado"
+                android:textSize="11sp" />
+
+            <TextView
+                android:id="@+id/resumo_jogos"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-medium"
+                android:includeFontPadding="false"
+                android:textColor="@color/branco"
+                android:textSize="20sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:includeFontPadding="false"
+                android:letterSpacing="0.08"
+                android:text="@string/col_v"
+                android:textAllCaps="true"
+                android:textColor="@color/texto_apagado"
+                android:textSize="11sp" />
+
+            <TextView
+                android:id="@+id/resumo_vitorias"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-medium"
+                android:includeFontPadding="false"
+                android:textColor="@color/vitoria"
+                android:textSize="20sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:includeFontPadding="false"
+                android:letterSpacing="0.08"
+                android:text="@string/col_e"
+                android:textAllCaps="true"
+                android:textColor="@color/texto_apagado"
+                android:textSize="11sp" />
+
+            <TextView
+                android:id="@+id/resumo_empates"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-medium"
+                android:includeFontPadding="false"
+                android:textColor="@color/empate"
+                android:textSize="20sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:includeFontPadding="false"
+                android:letterSpacing="0.08"
+                android:text="@string/col_d"
+                android:textAllCaps="true"
+                android:textColor="@color/texto_apagado"
+                android:textSize="11sp" />
+
+            <TextView
+                android:id="@+id/resumo_derrotas"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-medium"
+                android:includeFontPadding="false"
+                android:textColor="@color/derrota"
+                android:textSize="20sp" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:includeFontPadding="false"
+                android:letterSpacing="0.08"
+                android:text="@string/col_gp"
+                android:textAllCaps="true"
+                android:textColor="@color/texto_apagado"
+                android:textSize="11sp" />
+
+            <TextView
+                android:id="@+id/resumo_gp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-medium"
+                android:includeFontPadding="false"
+                android:textColor="@color/branco"
+                android:textSize="20sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:includeFontPadding="false"
+                android:letterSpacing="0.08"
+                android:text="@string/col_gc"
+                android:textAllCaps="true"
+                android:textColor="@color/texto_apagado"
+                android:textSize="11sp" />
+
+            <TextView
+                android:id="@+id/resumo_gc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-medium"
+                android:includeFontPadding="false"
+                android:textColor="@color/branco"
+                android:textSize="20sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:includeFontPadding="false"
+                android:letterSpacing="0.08"
+                android:text="@string/col_sg"
+                android:textAllCaps="true"
+                android:textColor="@color/texto_apagado"
+                android:textSize="11sp" />
+
+            <TextView
+                android:id="@+id/resumo_sg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-medium"
+                android:includeFontPadding="false"
+                android:textColor="@color/branco"
+                android:textSize="20sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:includeFontPadding="false"
+                android:letterSpacing="0.08"
+                android:text="@string/col_apr"
+                android:textAllCaps="true"
+                android:textColor="@color/texto_apagado"
+                android:textSize="11sp" />
+
+            <TextView
+                android:id="@+id/resumo_aproveitamento"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-medium"
+                android:includeFontPadding="false"
+                android:textColor="@color/branco"
+                android:textSize="20sp" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/resumo_ultimos_titulo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:fontFamily="sans-serif-medium"
+        android:includeFontPadding="false"
+        android:letterSpacing="0.08"
+        android:text="@string/resumo_ultimos"
+        android:textAllCaps="true"
+        android:textColor="@color/texto_fraco"
+        android:textSize="12sp" />
+
+    <LinearLayout
+        android:id="@+id/resumo_ultimos"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-medium"
+                android:includeFontPadding="false"
+                android:letterSpacing="0.08"
+                android:text="@string/resumo_maior_vitoria"
+                android:textAllCaps="true"
+                android:textColor="@color/texto_fraco"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/resumo_maior"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:ellipsize="end"
+                android:fontFamily="sans-serif-medium"
+                android:includeFontPadding="false"
+                android:maxLines="1"
+                android:textColor="@color/branco"
+                android:textSize="16sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-medium"
+                android:includeFontPadding="false"
+                android:letterSpacing="0.08"
+                android:text="@string/resumo_pior_derrota"
+                android:textAllCaps="true"
+                android:textColor="@color/texto_fraco"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/resumo_pior"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:ellipsize="end"
+                android:fontFamily="sans-serif-medium"
+                android:includeFontPadding="false"
+                android:maxLines="1"
+                android:textColor="@color/branco"
+                android:textSize="16sp" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/resumo_bloco_ligas"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-medium"
+            android:includeFontPadding="false"
+            android:letterSpacing="0.08"
+            android:text="@string/resumo_por_competicao"
+            android:textAllCaps="true"
+            android:textColor="@color/texto_fraco"
+            android:textSize="12sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:includeFontPadding="false"
+                android:textColor="@color/texto_apagado"
+                android:textSize="11sp" />
+
+            <TextView
+                android:layout_width="36dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:includeFontPadding="false"
+                android:text="@string/col_j"
+                android:textColor="@color/texto_apagado"
+                android:textSize="11sp" />
+
+            <TextView
+                android:layout_width="36dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:includeFontPadding="false"
+                android:text="@string/col_v"
+                android:textColor="@color/texto_apagado"
+                android:textSize="11sp" />
+
+            <TextView
+                android:layout_width="36dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:includeFontPadding="false"
+                android:text="@string/col_e"
+                android:textColor="@color/texto_apagado"
+                android:textSize="11sp" />
+
+            <TextView
+                android:layout_width="36dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:includeFontPadding="false"
+                android:text="@string/col_d"
+                android:textColor="@color/texto_apagado"
+                android:textSize="11sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/resumo_ligas"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
+    </LinearLayout>
+</LinearLayout>

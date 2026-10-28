@@ -7,4 +7,8 @@
     <color name="texto_apagado">#80FFFFFF</color>
     <color name="linha">#14FFFFFF</color>
     <color name="sp_fundo">#33C60000</color>
+    <color name="vitoria">#FF2EAD5B</color>
+    <color name="empate">#B3FFFFFF</color>
+    <color name="empate_bola">#FFB0B4BA</color>
+    <color name="derrota">#FFE53935</color>
 </resources>

@@ -4,16 +4,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.time.Instant;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -27,14 +20,13 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
 /**
- * API pública da ESPN, sem chave. O placar de um dia não traz a temporada: o calendário da liga
- * lista as datas e cada data vira um placar. A agenda do time só devolve jogo já disputado.
- * Bloqueia a thread; quem chama está fora da UI.
+ * API pública da ESPN, sem chave. Agenda do time 2026 (próximos com {@code fixture=true},
+ * resultados sem) e tabela do Brasileirão. Bloqueia a thread; quem chama está fora da UI.
  */
 final class EspnClient {
     static final String TIME_SP = "2026";
-    private static final String PLACAR =
-            "https://site.api.espn.com/apis/site/v2/sports/soccer/bra.1/scoreboard";
+    private static final String AGENDA =
+            "https://site.api.espn.com/apis/site/v2/sports/soccer/all/teams/2026/schedule";
     private static final String TABELA =
             "https://site.api.espn.com/apis/v2/sports/soccer/bra.1/standings";
     private static final String CONSULTA = "lang=pt&region=br";
@@ -44,77 +36,44 @@ final class EspnClient {
     private EspnClient() { }
 
     static Snapshot buscar(BroadcastResolver canais) throws IOException {
+        ExecutorService pool = Executors.newFixedThreadPool(3);
         try {
-            JSONObject placar = new JSONObject(ler(PLACAR + "?" + CONSULTA));
-            LocalDate hoje = LocalDate.now(Horario.SAO_PAULO);
-            String chaveHoje = hoje.format(DateTimeFormatter.BASIC_ISO_DATE);
-            List<String> dias = dias(calendario(placar), hoje);
+            Future<JSONArray> proximos = pool.submit(() ->
+                    eventos(Rede.get(AGENDA + "?fixture=true&" + CONSULTA, ESPERA_MS, Rede.UA_APP)));
+            Future<JSONArray> resultados = pool.submit(() ->
+                    eventos(Rede.get(AGENDA + "?" + CONSULTA, ESPERA_MS, Rede.UA_APP)));
+            Future<List<StandingRow>> tabelaFutura = pool.submit(() ->
+                    tabela(new JSONObject(Rede.get(TABELA + "?" + CONSULTA, ESPERA_MS, Rede.UA_APP))));
 
-            ExecutorService pool = Executors.newFixedThreadPool(4);
+            JSONArray todos = new JSONArray();
             try {
-                Future<List<StandingRow>> tabelaFutura = pool.submit(() ->
-                        tabela(new JSONObject(ler(TABELA + "?" + CONSULTA))));
-                List<Future<JSONArray>> diasFuturos = new ArrayList<>();
-                for (int i = 0; i < dias.size(); i++) {
-                    String dia = dias.get(i);
-                    if (dia.equals(chaveHoje)) continue;
-                    diasFuturos.add(pool.submit(() -> placarDoDia(dia)));
-                }
-
-                JSONArray eventos = new JSONArray();
-                copiar(eventos, placar.optJSONArray("events"));
-                for (int i = 0; i < diasFuturos.size(); i++) {
-                    try {
-                        copiar(eventos, diasFuturos.get(i).get(25, TimeUnit.SECONDS));
-                    } catch (Exception ignorado) {
-                        // Um dia que falhou não derruba o resto da rodada.
-                    }
-                }
-
-                List<Match> jogos = jogos(eventos, Instant.now(), canais);
-                List<StandingRow> linhas;
-                try {
-                    linhas = tabelaFutura.get(25, TimeUnit.SECONDS);
-                } catch (Exception ignorado) {
-                    linhas = new ArrayList<>();
-                }
-                if (jogos.isEmpty() && linhas.isEmpty()) {
-                    throw new IOException("ESPN não trouxe jogos nem tabela");
-                }
-                return new Snapshot(jogos, linhas, System.currentTimeMillis());
-            } finally {
-                pool.shutdownNow();
+                copiar(todos, proximos.get(25, TimeUnit.SECONDS));
+            } catch (Exception ignorado) {
+                // Sem próximos a temporada ainda pode ter resultados.
             }
-        } catch (JSONException e) {
-            throw new IOException("Resposta da ESPN ilegível", e);
+            try {
+                copiar(todos, resultados.get(25, TimeUnit.SECONDS));
+            } catch (Exception ignorado) {
+                // Sem resultados a tela ainda pode mostrar os próximos.
+            }
+
+            List<Match> jogos = jogos(todos, Instant.now(), canais);
+            List<StandingRow> linhas;
+            try {
+                linhas = tabelaFutura.get(25, TimeUnit.SECONDS);
+            } catch (Exception ignorado) {
+                linhas = new ArrayList<>();
+            }
+            if (jogos.isEmpty() && linhas.isEmpty()) {
+                throw new IOException("ESPN não trouxe jogos nem tabela");
+            }
+            return new Snapshot(jogos, linhas, System.currentTimeMillis());
+        } finally {
+            pool.shutdownNow();
         }
     }
 
-    /** Datas {@code yyyyMMdd} do calendário, de {@code hoje} em diante, na ordem da ESPN. */
-    static List<String> dias(JSONArray calendario, LocalDate hoje) {
-        List<String> saida = new ArrayList<>();
-        if (calendario == null) return saida;
-        for (int i = 0; i < calendario.length(); i++) {
-            String texto = calendario.optString(i, "");
-            if (texto.length() < 10) {
-                JSONObject item = calendario.optJSONObject(i);
-                texto = item == null ? "" : item.optString("startDate", "");
-            }
-            if (texto.length() < 10) continue;
-            LocalDate dia;
-            try {
-                dia = LocalDate.parse(texto.substring(0, 10));
-            } catch (DateTimeParseException e) {
-                continue;
-            }
-            if (dia.isBefore(hoje)) continue;
-            String chave = texto.substring(0, 4) + texto.substring(5, 7) + texto.substring(8, 10);
-            if (!saida.contains(chave)) saida.add(chave);
-        }
-        return saida;
-    }
-
-    /** Próximos jogos do São Paulo. Encerrado e jogo de outro time ficam de fora. */
+    /** Jogos do São Paulo, próximos e encerrados, sem repetir id. */
     static List<Match> jogos(JSONArray eventos, Instant agora, BroadcastResolver canais) {
         List<Match> saida = new ArrayList<>();
         if (eventos == null) return saida;
@@ -167,19 +126,10 @@ final class EspnClient {
         return saida;
     }
 
-    private static JSONArray placarDoDia(String dia) throws IOException, JSONException {
-        JSONObject json = new JSONObject(ler(PLACAR + "?dates=" + dia + "&" + CONSULTA));
-        JSONArray eventos = json.optJSONArray("events");
-        return eventos == null ? new JSONArray() : eventos;
-    }
-
-    private static JSONArray calendario(JSONObject placar) {
-        JSONArray ligas = placar.optJSONArray("leagues");
-        if (ligas == null || ligas.length() == 0) return new JSONArray();
-        JSONObject liga = ligas.optJSONObject(0);
-        if (liga == null) return new JSONArray();
-        JSONArray calendario = liga.optJSONArray("calendar");
-        return calendario == null ? new JSONArray() : calendario;
+    private static JSONArray eventos(String corpo) throws JSONException {
+        JSONObject raiz = new JSONObject(corpo);
+        JSONArray lista = raiz.optJSONArray("events");
+        return lista == null ? new JSONArray() : lista;
     }
 
     private static Match jogo(JSONObject evento, Instant agora, BroadcastResolver canais) {
@@ -204,15 +154,15 @@ final class EspnClient {
 
         JSONObject tipo = tipoDoStatus(competicao, evento);
         String estado = tipo == null ? "" : tipo.optString("state", "");
-        boolean encerrado = tipo != null && tipo.optBoolean("completed", false);
-        if (encerrado || "post".equals(estado)) return null;
+        boolean encerrado = tipo != null
+                && (tipo.optBoolean("completed", false) || "post".equals(estado));
 
         String data = competicao.optString("date", "");
         if (data.isEmpty()) data = evento.optString("date", "");
         Instant instante = instante(data);
         if (instante == null) return null;
         boolean aoVivo = "in".equals(estado);
-        if (!aoVivo && instante.isBefore(agora.minus(AINDA_EM_JOGO))) return null;
+        if (!encerrado && !aoVivo && instante.isBefore(agora.minus(AINDA_EM_JOGO))) return null;
 
         JSONObject timeAdversario = adversario.optJSONObject("team");
         String nome = timeAdversario == null ? "" : nomeDoTime(timeAdversario);
@@ -221,7 +171,35 @@ final class EspnClient {
         String mando = competicao.optBoolean("neutralSite", false)
                 ? "neutral"
                 : sp.optString("homeAway", "");
-        return new Match(nome, mando, instante, estadio(competicao), canais.canais(competicao), aoVivo);
+        String casa;
+        String fora;
+        String nomeSp = nomeDoTime(sp.optJSONObject("team"));
+        if ("home".equals(sp.optString("homeAway", ""))) {
+            casa = nomeSp;
+            fora = nome;
+        } else {
+            casa = nome;
+            fora = nomeSp;
+        }
+
+        List<String> canaisJogo = new ArrayList<>();
+        if (!encerrado && canais != null) {
+            canaisJogo = canais.canais(competicao, instante, casa, fora);
+            if (canaisJogo == null) canaisJogo = new ArrayList<>();
+        }
+
+        return new Match(
+                nome,
+                mando,
+                instante,
+                estadio(competicao),
+                canaisJogo,
+                aoVivo,
+                Competicao.nome(evento),
+                Competicao.slug(evento),
+                encerrado ? gols(sp) : null,
+                encerrado ? gols(adversario) : null,
+                encerrado);
     }
 
     /** A ESPN manda {@code 2026-10-29T00:30Z}, sem os segundos. {@link Instant#parse} exige os segundos. */
@@ -237,6 +215,33 @@ final class EspnClient {
         try {
             return Instant.parse(texto);
         } catch (DateTimeParseException e) {
+            return null;
+        }
+    }
+
+    static Integer gols(JSONObject lado) {
+        if (lado == null || !lado.has("score") || lado.isNull("score")) return null;
+        Object score = lado.opt("score");
+        if (score instanceof JSONObject) {
+            JSONObject objeto = (JSONObject) score;
+            if (objeto.has("value") && !objeto.isNull("value")) {
+                return (int) Math.round(objeto.optDouble("value"));
+            }
+            return inteiroTexto(objeto.optString("displayValue", ""));
+        }
+        if (score instanceof Number) {
+            return (int) Math.round(((Number) score).doubleValue());
+        }
+        return inteiroTexto(String.valueOf(score));
+    }
+
+    private static Integer inteiroTexto(String texto) {
+        if (texto == null) return null;
+        String limpo = texto.trim();
+        if (limpo.isEmpty()) return null;
+        try {
+            return (int) Math.round(Double.parseDouble(limpo));
+        } catch (NumberFormatException e) {
             return null;
         }
     }
@@ -261,6 +266,7 @@ final class EspnClient {
     }
 
     private static String nomeDoTime(JSONObject time) {
+        if (time == null) return "";
         String nome = time.optString("shortDisplayName", "").trim();
         if (nome.isEmpty()) nome = time.optString("displayName", "").trim();
         if (nome.isEmpty()) nome = time.optString("abbreviation", "").trim();
@@ -292,35 +298,5 @@ final class EspnClient {
     private static void copiar(JSONArray destino, JSONArray origem) throws JSONException {
         if (origem == null) return;
         for (int i = 0; i < origem.length(); i++) destino.put(origem.get(i));
-    }
-
-    private static String ler(String url) throws IOException {
-        HttpURLConnection conexao = (HttpURLConnection) new URL(url).openConnection();
-        conexao.setConnectTimeout(ESPERA_MS);
-        conexao.setReadTimeout(ESPERA_MS);
-        conexao.setRequestProperty("Accept", "application/json");
-        conexao.setRequestProperty("User-Agent", "SPFC-FireTV/1.0");
-        try {
-            int codigo = conexao.getResponseCode();
-            InputStream entrada = codigo >= 200 && codigo < 300
-                    ? conexao.getInputStream()
-                    : conexao.getErrorStream();
-            String corpo = entrada == null ? "" : texto(entrada);
-            if (codigo < 200 || codigo >= 300) {
-                throw new IOException("HTTP " + codigo);
-            }
-            return corpo;
-        } finally {
-            conexao.disconnect();
-        }
-    }
-
-    private static String texto(InputStream entrada) throws IOException {
-        ByteArrayOutputStream saida = new ByteArrayOutputStream();
-        byte[] bloco = new byte[4096];
-        int lido;
-        while ((lido = entrada.read(bloco)) >= 0) saida.write(bloco, 0, lido);
-        // toString(Charset) só existe no Android 13. No Fire OS 6 o app fecha.
-        return new String(saida.toByteArray(), StandardCharsets.UTF_8);
     }
 }

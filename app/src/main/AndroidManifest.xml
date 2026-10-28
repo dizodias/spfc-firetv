@@ -4,7 +4,7 @@
     <uses-feature android:name="android.software.leanback" android:required="false" />
     <uses-feature android:name="android.hardware.touchscreen" android:required="false" />
 
-    <!-- Única permissão: a API pública da ESPN (placar e tabela). -->
+    <!-- Única permissão: ESPN (agenda e tabela) e ge.globo (canais). -->
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application

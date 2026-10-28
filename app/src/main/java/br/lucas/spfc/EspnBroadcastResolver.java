@@ -3,17 +3,19 @@ package br.lucas.spfc;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
 /**
  * Lê {@code broadcasts} e {@code geoBroadcasts} da ESPN. Se houver canal com região BR
- * ou idioma pt, fica só com esses. Nome genérico "TV" não entra.
+ * ou idioma pt, fica só com esses. Nome genérico "TV" não entra. Data e times são ignorados.
  */
 final class EspnBroadcastResolver implements BroadcastResolver {
     @Override
-    public List<String> canais(JSONObject competicao) {
+    public List<String> canais(JSONObject competicao, Instant kickoff, String casa, String fora) {
+        if (competicao == null) return new ArrayList<>();
         List<String> brasil = new ArrayList<>();
         List<String> outros = new ArrayList<>();
         coletar(competicao.optJSONArray("geoBroadcasts"), brasil, outros);

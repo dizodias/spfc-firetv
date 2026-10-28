@@ -59,33 +59,32 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/abas"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal" />
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginTop="6dp"
+            android:layout_marginTop="8dp"
             android:layout_weight="1"
             android:orientation="horizontal">
 
             <LinearLayout
+                android:id="@+id/coluna_jogos"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="50"
                 android:orientation="vertical">
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="sans-serif-medium"
-                    android:letterSpacing="0.08"
-                    android:text="@string/proximos"
-                    android:textAllCaps="true"
-                    android:textColor="@color/texto_fraco"
-                    android:textSize="12sp" />
-
-                <TextView
                     android:id="@+id/sem_jogos"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
+                    android:layout_marginTop="4dp"
                     android:text="@string/sem_jogos"
                     android:textColor="@color/texto_fraco"
                     android:textSize="16sp"
@@ -95,7 +94,7 @@
                     android:id="@+id/jogos"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginTop="4dp"
                     android:layout_weight="1"
                     android:clipToPadding="false"
                     android:descendantFocusability="afterDescendants"
@@ -105,54 +104,71 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/coluna_tabela"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_marginStart="12dp"
                 android:layout_weight="50"
                 android:orientation="vertical">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="sans-serif-medium"
-                    android:letterSpacing="0.08"
-                    android:text="@string/tabela"
-                    android:textAllCaps="true"
-                    android:textColor="@color/texto_fraco"
-                    android:textSize="12sp" />
-
-                <include
-                    android:id="@+id/cabecalho"
-                    layout="@layout/cabecalho_tabela"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="2dp" />
-
-                <TextView
-                    android:id="@+id/sem_tabela"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:text="@string/tabela_indisponivel"
-                    android:textColor="@color/texto_fraco"
-                    android:textSize="16sp"
-                    android:visibility="gone" />
-
                 <LinearLayout
-                    android:id="@+id/tabela"
+                    android:id="@+id/bloco_tabela"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1"
-                    android:descendantFocusability="afterDescendants"
-                    android:focusable="false"
-                    android:orientation="vertical" />
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif-medium"
+                        android:letterSpacing="0.08"
+                        android:text="@string/tabela"
+                        android:textAllCaps="true"
+                        android:textColor="@color/texto_fraco"
+                        android:textSize="12sp" />
+
+                    <include
+                        android:id="@+id/cabecalho"
+                        layout="@layout/cabecalho_tabela"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp" />
+
+                    <TextView
+                        android:id="@+id/sem_tabela"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:text="@string/tabela_indisponivel"
+                        android:textColor="@color/texto_fraco"
+                        android:textSize="16sp"
+                        android:visibility="gone" />
+
+                    <LinearLayout
+                        android:id="@+id/tabela"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:descendantFocusability="afterDescendants"
+                        android:focusable="false"
+                        android:orientation="vertical" />
+
+                    <include
+                        android:id="@+id/legenda"
+                        layout="@layout/legenda_tabela"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp" />
+                </LinearLayout>
 
                 <include
-                    android:id="@+id/legenda"
-                    layout="@layout/legenda_tabela"
+                    android:id="@+id/resumo"
+                    layout="@layout/painel_resumo"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp" />
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:visibility="gone" />
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>

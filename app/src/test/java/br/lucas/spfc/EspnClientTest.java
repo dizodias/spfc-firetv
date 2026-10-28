@@ -1,11 +1,9 @@
 package br.lucas.spfc;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.Test;
 
 import java.time.Instant;
-import java.time.LocalDate;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -21,20 +19,12 @@ public class EspnClientTest {
     }
 
     @Test
-    public void calendarioIgnoraDiaPassado() throws Exception {
-        JSONArray calendario = new JSONArray();
-        calendario.put("2026-10-27T07:00Z");
-        calendario.put("2026-10-28T07:00Z");
-        calendario.put("2026-11-04T08:00Z");
-        assertEquals(List.of("20261028", "20261104"),
-                EspnClient.dias(calendario, LocalDate.of(2026, 10, 28)));
-    }
-
-    @Test
     public void filtraProximoJogoECanalBrasileiro() throws Exception {
         JSONObject raiz = new JSONObject("""
                 {"events":[
-                  {"id":"1","date":"2026-10-29T00:30Z","competitions":[{
+                  {"id":"1","date":"2026-10-29T00:30Z",
+                    "league":{"name":"Brazilian Serie A","slug":"bra.1"},
+                    "competitions":[{
                     "date":"2026-10-29T00:30Z","neutralSite":false,
                     "venue":{"fullName":"Arena Fonte Nova","address":{"city":"Salvador"}},
                     "status":{"type":{"state":"pre","completed":false}},
@@ -48,11 +38,15 @@ public class EspnClientTest {
                       {"region":"br","lang":"pt","media":{"shortName":"Premiere"}}
                     ]
                   }]},
-                  {"id":"2","date":"2026-10-24T19:30Z","competitions":[{
+                  {"id":"2","date":"2026-10-24T19:30Z",
+                    "league":{"name":"Campeonato Brasileiro","slug":"bra.1"},
+                    "competitions":[{
                     "status":{"type":{"state":"post","completed":true}},
                     "competitors":[
-                      {"homeAway":"home","team":{"id":"2026","shortDisplayName":"São Paulo"}},
-                      {"homeAway":"away","team":{"id":"9169","shortDisplayName":"Mirassol"}}
+                      {"homeAway":"home","team":{"id":"2026","shortDisplayName":"São Paulo"},
+                       "score":{"value":1.0,"displayValue":"1"}},
+                      {"homeAway":"away","team":{"id":"9169","shortDisplayName":"Mirassol"},
+                       "score":{"value":1.0,"displayValue":"1"}}
                     ]
                   }]},
                   {"id":"3","date":"2026-11-01T22:00Z","competitions":[{
@@ -68,13 +62,26 @@ public class EspnClientTest {
                 raiz.getJSONArray("events"),
                 Instant.parse("2026-10-28T12:00:00Z"),
                 new EspnBroadcastResolver());
-        assertEquals(1, jogos.size());
-        Match jogo = jogos.get(0);
+        assertEquals(2, jogos.size());
+        Snapshot snapshot = new Snapshot(jogos, List.of(), 0);
+        List<Match> proximos = snapshot.proximos();
+        assertEquals(1, proximos.size());
+        Match jogo = proximos.get(0);
         assertEquals("Bahia", jogo.opponent);
         assertEquals("away", jogo.homeAway);
         assertEquals("Arena Fonte Nova, Salvador", jogo.venue);
         assertEquals(List.of("Premiere"), jogo.channels);
+        assertEquals("Brasileirão", jogo.leagueName);
+        assertEquals("bra.1", jogo.leagueSlug);
         assertFalse(jogo.live);
+        assertFalse(jogo.finished);
+
+        Match encerrado = snapshot.resultados().get(0);
+        assertEquals("Mirassol", encerrado.opponent);
+        assertEquals(Integer.valueOf(1), encerrado.goalsFor);
+        assertEquals(Integer.valueOf(1), encerrado.goalsAgainst);
+        assertEquals(Match.Resultado.EMPATE, encerrado.resultado());
+        assertTrue(encerrado.finished);
     }
 
     @Test
@@ -82,7 +89,16 @@ public class EspnClientTest {
         JSONObject competicao = new JSONObject("""
                 {"broadcasts":[],"geoBroadcasts":[]}
                 """);
-        assertTrue(new EspnBroadcastResolver().canais(competicao).isEmpty());
+        assertTrue(new EspnBroadcastResolver().canais(
+                competicao, Instant.parse("2026-10-29T00:30:00Z"), "Bahia", "São Paulo").isEmpty());
+    }
+
+    @Test
+    public void lePlacarObjetoNumeroOuTexto() throws Exception {
+        assertEquals(Integer.valueOf(2), EspnClient.gols(new JSONObject(
+                "{\"score\":{\"value\":2.0,\"displayValue\":\"2\"}}")));
+        assertEquals(Integer.valueOf(3), EspnClient.gols(new JSONObject("{\"score\":3}")));
+        assertEquals(Integer.valueOf(1), EspnClient.gols(new JSONObject("{\"score\":\"1\"}")));
     }
 
     @Test

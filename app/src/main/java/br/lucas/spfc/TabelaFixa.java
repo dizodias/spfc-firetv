@@ -15,10 +15,15 @@ import java.util.List;
 final class TabelaFixa {
     private final LayoutInflater inflater;
     private final LinearLayout linhas;
+    private int focoCima;
 
     TabelaFixa(LayoutInflater inflater, LinearLayout linhas) {
         this.inflater = inflater;
         this.linhas = linhas;
+    }
+
+    void definirFocoCima(int id) {
+        this.focoCima = id;
     }
 
     void pintarLegenda(View legenda) {
@@ -35,7 +40,7 @@ final class TabelaFixa {
             View linha = inflater.inflate(R.layout.item_tabela, linhas, false);
             linha.setLayoutParams(new LinearLayout.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT, 0, 1f));
-            ligar(linha, times.get(i));
+            ligar(linha, times.get(i), i == 0 ? focoCima : 0);
             linhas.addView(linha);
         }
     }
@@ -44,7 +49,7 @@ final class TabelaFixa {
         raiz.findViewById(id).setBackgroundTintList(ColorStateList.valueOf(cor));
     }
 
-    private static void ligar(View linha, StandingRow time) {
+    private static void ligar(View linha, StandingRow time, int focoCima) {
         Faixas.Tipo tipo = Faixas.de(time.rank);
         ((TextView) linha.findViewById(R.id.pos)).setText(Integer.toString(time.rank));
         TextView nome = linha.findViewById(R.id.time);
@@ -64,6 +69,8 @@ final class TabelaFixa {
         escudo.setVisibility(time.isSpfc ? View.VISIBLE : View.GONE);
 
         linha.setNextFocusLeftId(R.id.jogos);
+        if (focoCima != 0) linha.setNextFocusUpId(focoCima);
+        else linha.setNextFocusUpId(View.NO_ID);
         linha.setOnFocusChangeListener((v, focado) -> pintar(v, tipo, focado));
         pintar(linha, tipo, linha.isFocused());
     }

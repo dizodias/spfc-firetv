@@ -29,6 +29,22 @@
             android:textSize="14sp" />
 
         <TextView
+            android:id="@+id/competicao"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/chip_competicao"
+            android:duplicateParentState="true"
+            android:fontFamily="sans-serif-medium"
+            android:paddingStart="8dp"
+            android:paddingTop="2dp"
+            android:paddingEnd="8dp"
+            android:paddingBottom="2dp"
+            android:textColor="@color/texto_fraco"
+            android:textSize="11sp"
+            android:visibility="gone" />
+
+        <TextView
             android:id="@+id/mando"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -49,6 +65,15 @@
         android:maxLines="1"
         android:textColor="@color/branco"
         android:textSize="22sp" />
+
+    <TextView
+        android:id="@+id/placar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="1dp"
+        android:fontFamily="sans-serif-medium"
+        android:textSize="20sp"
+        android:visibility="gone" />
 
     <TextView
         android:id="@+id/estadio"
