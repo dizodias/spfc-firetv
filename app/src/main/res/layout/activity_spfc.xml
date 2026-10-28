@@ -195,11 +195,17 @@
             android:textSize="16sp" />
 
         <TextView
-            android:layout_width="wrap_content"
+            android:id="@+id/credito"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:text="@string/fonte"
+            android:layout_marginStart="24dp"
+            android:layout_weight="1"
+            android:focusable="false"
+            android:gravity="end"
+            android:includeFontPadding="false"
+            android:maxLines="1"
+            android:text="@string/credito"
             android:textColor="@color/texto_apagado"
-            android:textSize="13sp" />
+            android:textSize="@dimen/texto_credito" />
     </LinearLayout>
 </FrameLayout>
