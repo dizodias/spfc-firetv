@@ -2,6 +2,7 @@ package br.lucas.spfc;
 
 import org.junit.Test;
 
+import java.io.File;
 import java.nio.file.Files;
 import java.time.Instant;
 import java.util.Collections;
@@ -79,5 +80,75 @@ public class SpfcRepositoryTest {
         assertEquals("Bahia", lido.matches.get(0).opponent);
         assertEquals("", lido.matches.get(0).leagueSlug);
         assertFalse(lido.matches.get(0).finished);
+    }
+
+    @Test
+    public void cacheDaRodadaRedondo() throws Exception {
+        SpfcRepository repo = new SpfcRepository(Files.createTempDirectory("spfc-rodada").toFile());
+        JogoRodada jogo = new JogoRodada(
+                "99", 33, Instant.parse("2026-10-29T00:30:00Z"),
+                "Arena Fonte Nova",
+                "Bahia", "São Paulo", "9967", "2026",
+                "https://a.espncdn.com/bah.png", "https://a.espncdn.com/sp.png",
+                1, 0,
+                JogoRodada.Status.AO_VIVO, "67'",
+                List.of("Premiere"), true);
+        repo.gravar(new Snapshot(List.of(), List.of(new StandingRow(
+                9, "São Paulo", 32, 12, 7, 13, 37, "+1", 43, true)), List.of(jogo), 50L));
+        Snapshot lido = repo.ler();
+        assertEquals(1, lido.rodada.size());
+        JogoRodada volta = lido.rodada.get(0);
+        assertEquals("99", volta.id);
+        assertEquals(Integer.valueOf(33), volta.rodada);
+        assertEquals("Bahia", volta.casaNome);
+        assertEquals("São Paulo", volta.foraNome);
+        assertEquals("9967", volta.casaId);
+        assertEquals("2026", volta.foraId);
+        assertEquals("https://a.espncdn.com/bah.png", volta.casaLogo);
+        assertEquals(Integer.valueOf(1), volta.casaGols);
+        assertEquals(Integer.valueOf(0), volta.foraGols);
+        assertEquals("67'", volta.minuto);
+        assertEquals(JogoRodada.Status.AO_VIVO, volta.status);
+        assertEquals(List.of("Premiere"), volta.channels);
+        assertTrue(volta.saoPaulo);
+        assertTrue(lido.temAoVivo());
+        assertTrue(lido.rodadaOk);
+    }
+
+    @Test
+    public void cacheAntigoSemRodadaContinuaLegivel() throws Exception {
+        File pasta = Files.createTempDirectory("spfc-sem-rodada").toFile();
+        Rede.gravar(new File(pasta, "spfc-cache.json"),
+                "{\"fetchedAt\":5,\"matches\":[],\"standings\":[]}");
+        Snapshot lido = new SpfcRepository(pasta).ler();
+        assertEquals(5L, lido.fetchedAtMillis);
+        assertTrue(lido.rodada.isEmpty());
+        assertFalse(lido.rodadaOk);
+        assertFalse(lido.temAoVivo());
+    }
+
+    @Test
+    public void rodadaVaziaConfirmadaNaoEFalha() throws Exception {
+        SpfcRepository repo = new SpfcRepository(Files.createTempDirectory("spfc-flag").toFile());
+        StandingRow linha = new StandingRow(1, "São Paulo", 1, 1, 0, 0, 1, "+1", 3, true);
+        repo.gravar(new Snapshot(List.of(), List.of(linha), List.of(), 9L, true));
+        Snapshot vazia = repo.ler();
+        assertTrue(vazia.rodada.isEmpty());
+        assertTrue(vazia.rodadaOk);
+
+        repo.gravar(new Snapshot(List.of(), List.of(linha), List.of(), 9L, false));
+        assertFalse(repo.ler().rodadaOk);
+    }
+
+    @Test
+    public void cacheAntigoComRodadaSegueValido() throws Exception {
+        File pasta = Files.createTempDirectory("spfc-rodada-velha").toFile();
+        Rede.gravar(new File(pasta, "spfc-cache.json"),
+                "{\"fetchedAt\":5,\"matches\":[],\"standings\":[],\"rodada\":["
+                        + "{\"id\":\"1\",\"kickoff\":\"2026-10-29T00:30:00Z\","
+                        + "\"home\":\"Bahia\",\"away\":\"São Paulo\",\"status\":\"agendado\"}]}");
+        Snapshot lido = new SpfcRepository(pasta).ler();
+        assertEquals(1, lido.rodada.size());
+        assertTrue(lido.rodadaOk);
     }
 }

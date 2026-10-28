@@ -3,12 +3,15 @@
     <string name="app_name">São Paulo FC</string>
     <string name="titulo">São Paulo FC</string>
     <string name="proximos">Próximos jogos</string>
+    <string name="rodada">Rodada</string>
     <string name="resultados">Resultados</string>
     <string name="tabela">Brasileirão</string>
     <string name="casa">Casa</string>
     <string name="fora">Fora</string>
     <string name="neutro">Neutro</string>
     <string name="ao_vivo">Ao vivo</string>
+    <string name="ao_vivo_marca">AO VIVO</string>
+    <string name="ao_vivo_minuto">AO VIVO · %1$s</string>
     <string name="canal_a_confirmar">Canal a confirmar</string>
     <string name="estadio_a_confirmar">Estádio a confirmar</string>
     <string name="atualizado">atualizado às %1$s</string>
@@ -18,6 +21,8 @@
     <string name="carregando">Buscando jogos e tabela…</string>
     <string name="sem_rede">Sem rede. Não deu para falar com a ESPN.</string>
     <string name="sem_jogos">Nenhum próximo jogo no calendário da ESPN.</string>
+    <string name="sem_rodada">Nenhum jogo do Brasileirão nesta rodada.</string>
+    <string name="sem_rodada_rede">Sem conexão. Não foi possível carregar a rodada.</string>
     <string name="sem_resultados">Nenhum resultado nesta temporada.</string>
     <string name="sem_jogos_competicao">Nenhum jogo nesta competição.</string>
     <string name="tabela_indisponivel">Tabela indisponível agora.</string>
