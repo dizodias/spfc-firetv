@@ -18,7 +18,7 @@
     <string name="sem_rede">Sem rede. Não deu para falar com a ESPN.</string>
     <string name="sem_jogos">Nenhum próximo jogo no calendário da ESPN.</string>
     <string name="tabela_indisponivel">Tabela indisponível agora.</string>
-    <string name="fonte">Fonte: ESPN</string>
+    <string name="credito">Feito por um torcedor · dizodias.com · Dados: ESPN</string>
     <string name="col_pos">#</string>
     <string name="col_j">J</string>
     <string name="col_v">V</string>
